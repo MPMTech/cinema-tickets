@@ -38,6 +38,7 @@ public class TicketServiceImplTest {
 
 
     @Test
+    @DisplayName("Should able to reserve and purchase tickets with valid ticket requests")
     public void testValidPurchaseTickets() {
         verifyPurchaseTicket(5, 3, 2);
         verifyPurchaseTicket(5, 0, 0);
@@ -47,23 +48,8 @@ public class TicketServiceImplTest {
         verifyPurchaseTicket(15, 10, 10);
     }
 
-    private void verifyPurchaseTicket(int adultTickets, int childTickets, int infantTickets) {
-
-        int totalSeatToAllocate = adultTickets + childTickets;
-        int totalAmount = calculateTotalAmount(adultTickets, childTickets);
-
-        ticketService.purchaseTickets(accountId, createTicketRequest(Type.ADULT, adultTickets),
-                createTicketRequest(Type.CHILD, childTickets),
-                createTicketRequest(Type.INFANT, infantTickets));
-
-        verify(seatReservationService).reserveSeat(accountId, totalSeatToAllocate);
-        verify(ticketPaymentService).makePayment(accountId, totalAmount);
-
-        reset(seatReservationService, ticketPaymentService);
-    }
-
-
     @Test
+    @DisplayName("Should throws InvalidPurchaseException when total number of seat are more than max allowed(25)")
     public void testInvalidPurchaseTickets_requestTicketMoreThanAllowed() {
 
         InvalidPurchaseException invalidPurchaseException = Assertions.assertThrowsExactly(InvalidPurchaseException.class,
@@ -109,6 +95,21 @@ public class TicketServiceImplTest {
     @DisplayName("Should be successfully purchase tickets when adult and child tickets count are more than 25 ignoring infant tickets")
     public void testValidPurchaseTickets_withInfantCount_aboveMaxAllowed() {
         verifyPurchaseTicket(15, 10, 10);
+    }
+
+    private void verifyPurchaseTicket(int adultTickets, int childTickets, int infantTickets) {
+
+        int totalSeatToAllocate = adultTickets + childTickets;
+        int totalAmount = calculateTotalAmount(adultTickets, childTickets);
+
+        ticketService.purchaseTickets(accountId, createTicketRequest(Type.ADULT, adultTickets),
+                createTicketRequest(Type.CHILD, childTickets),
+                createTicketRequest(Type.INFANT, infantTickets));
+
+        verify(seatReservationService).reserveSeat(accountId, totalSeatToAllocate);
+        verify(ticketPaymentService).makePayment(accountId, totalAmount);
+
+        reset(seatReservationService, ticketPaymentService);
     }
 
     private TicketTypeRequest createTicketRequest(Type type, int noOfTickets) {

@@ -73,7 +73,6 @@ class TicketValidatorTest {
 
     }
 
-
     @Test
     @DisplayName("Should throw InvalidPurchaseException for request with negative ticket numbers")
     public void testValidateTicketRequests_when_ticketValueIsGivenInMinus() {
@@ -96,8 +95,6 @@ class TicketValidatorTest {
         InvalidPurchaseException exception = Assertions.assertThrowsExactly(InvalidPurchaseException.class,
                 () -> ticketValidator.validateTicketRequests(ticketTypeRequests), "Expecting InvalidPurchaseException");
     }
-
-
 
     private static Map<TicketTypeRequest.Type, Integer> createTicketTypeCountMap(Integer adultTickets, Integer childTickets, Integer infantTickets) {
         Map<TicketTypeRequest.Type, Integer> ticketTypeCountMap = new HashMap<>();

@@ -10,14 +10,14 @@ public class AccountValidatorTest {
     private AccountValidator accountValidator = new AccountValidator();
 
     @Test
-    @DisplayName("Validate valid account")
+    @DisplayName("Should return true for valid accountId")
     public void testIsValidAccount()  {
         boolean isValidAccount = accountValidator.validateAccount(1L);
         Assertions.assertTrue(isValidAccount);
     }
 
     @Test
-    @DisplayName("Validate invalid account")
+    @DisplayName("Should throw InvalidPurchaseException when accountId is null or less than or equal to 0")
     public void testIsValidAccount_when_account_id_0() {
         InvalidPurchaseException invalidAccountException = Assertions.assertThrowsExactly(InvalidPurchaseException.class,
                 () -> accountValidator.validateAccount(0L));
